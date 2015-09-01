@@ -14,58 +14,65 @@ use Phaza\SingleTableInheritance\Tests\Fixtures\Vehicle;
  *
  * @package Phaza\SingleTableInheritance\Tests
  */
-class SingleTableInheritanceTraitStaticMethodsTest extends TestCase {
+class SingleTableInheritanceTraitStaticMethodsTest extends TestCase
+{
 
-  // getSingleTableTypeMap
+    // getSingleTableTypeMap
 
-  public function testGetTypeMapOfRoot() {
-    $expectedSubclassTypes = [
-      'motorvehicle' => 'Phaza\SingleTableInheritance\Tests\Fixtures\MotorVehicle',
-      'car'          => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car',
-      'truck'        => 'Phaza\SingleTableInheritance\Tests\Fixtures\Truck',
-      'bike'         => 'Phaza\SingleTableInheritance\Tests\Fixtures\Bike',
+    public function testGetTypeMapOfRoot()
+    {
+        $expectedSubclassTypes = [
+        'motorvehicle' => 'Phaza\SingleTableInheritance\Tests\Fixtures\MotorVehicle',
+        'car'          => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car',
+        'truck'        => 'Phaza\SingleTableInheritance\Tests\Fixtures\Truck',
+        'bike'         => 'Phaza\SingleTableInheritance\Tests\Fixtures\Bike',
 
-    ];
+        ];
 
-    $this->assertEquals($expectedSubclassTypes, Vehicle::getSingleTableTypeMap());
-  }
+        $this->assertEquals($expectedSubclassTypes, Vehicle::getSingleTableTypeMap());
+    }
 
-  public function testGetTypeMapOfChild() {
-    $expectedSubclassTypes = [
-      'motorvehicle' => 'Phaza\SingleTableInheritance\Tests\Fixtures\MotorVehicle',
-      'car'          => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car',
-      'truck'        => 'Phaza\SingleTableInheritance\Tests\Fixtures\Truck',
-    ];
+    public function testGetTypeMapOfChild()
+    {
+        $expectedSubclassTypes = [
+        'motorvehicle' => 'Phaza\SingleTableInheritance\Tests\Fixtures\MotorVehicle',
+        'car'          => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car',
+        'truck'        => 'Phaza\SingleTableInheritance\Tests\Fixtures\Truck',
+        ];
 
-    $this->assertEquals($expectedSubclassTypes, MotorVehicle::getSingleTableTypeMap());
-  }
+        $this->assertEquals($expectedSubclassTypes, MotorVehicle::getSingleTableTypeMap());
+    }
 
-  public function testGetTypeMapOfLeaf() {
+    public function testGetTypeMapOfLeaf()
+    {
 
-    $expectedSubclassTypes = [
-      'car' => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car'
-    ];
+        $expectedSubclassTypes = [
+        'car' => 'Phaza\SingleTableInheritance\Tests\Fixtures\Car'
+        ];
 
-    $this->assertEquals($expectedSubclassTypes, Car::getSingleTableTypeMap());
-  }
+        $this->assertEquals($expectedSubclassTypes, Car::getSingleTableTypeMap());
+    }
 
-  // getAllPersistedAttributes
+    // getAllPersistedAttributes
 
-  public function testGetAllPersistedOfRoot() {
-    $a = Vehicle::getAllPersistedAttributes();
-    sort($a);
-    $this->assertEquals(['color', 'owner_id'], $a);
-  }
+    public function testGetAllPersistedOfRoot()
+    {
+        $a = Vehicle::getAllPersistedAttributes();
+        sort($a);
+        $this->assertEquals(['color', 'owner_id'], $a);
+    }
 
-  public function testGetAllPersistedOfChild() {
-    $a = MotorVehicle::getAllPersistedAttributes();
-    sort($a);
-    $this->assertEquals(['color', 'fuel', 'owner_id'], $a);
-  }
+    public function testGetAllPersistedOfChild()
+    {
+        $a = MotorVehicle::getAllPersistedAttributes();
+        sort($a);
+        $this->assertEquals(['color', 'fuel', 'owner_id'], $a);
+    }
 
-  public function testGetAllPersistedOfLeaf() {
-    $a = Car::getAllPersistedAttributes();
-    sort($a);
-    $this->assertEquals(['capacity', 'color', 'fuel', 'owner_id'], $a);
-  }
-} 
+    public function testGetAllPersistedOfLeaf()
+    {
+        $a = Car::getAllPersistedAttributes();
+        sort($a);
+        $this->assertEquals(['capacity', 'color', 'fuel', 'owner_id'], $a);
+    }
+}

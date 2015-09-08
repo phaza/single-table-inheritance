@@ -173,11 +173,7 @@ trait SingleTableInheritanceTrait
     public function setSingleTableType()
     {
         $modelClass = get_class($this);
-        $classType = (property_exists($modelClass, 'singleTableType') ? $modelClass::$singleTableType : null);
-        if ($classType) {
-            $this->{static::$singleTableTypeField} = $classType;
-
-        } else {
+        if (!property_exists($modelClass, 'singleTableType')) {
             // We'd like to be able to declare non-leaf classes in the hierarchy as abstract so they can't be
             // instantiated and saved. However, Eloquent expects to instantiate classes at various points. Therefore
             // throw an exception if we try to save and instance that doesn't have a type.
@@ -185,6 +181,8 @@ trait SingleTableInheritanceTrait
                 'Cannot save Single table inheritance model without declaring static property $singleTableType.'
             );
         }
+
+        $this->{static::$singleTableTypeField} = $modelClass::$singleServiceType;
     }
 
     /**

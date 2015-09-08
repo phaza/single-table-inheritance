@@ -180,9 +180,10 @@ trait SingleTableInheritanceTrait
             throw new SingleTableInheritanceException(
                 'Cannot save Single table inheritance model without declaring static property $singleTableType.'
             );
-        }
 
-        $this->{static::$singleTableTypeField} = $modelClass::$singleServiceType;
+        } elseif (!isset($this->{static::$singleServiceTypeField})) {
+            $this->{static::$singleTableTypeField} = $modelClass::$singleServiceType;
+        }
     }
 
     /**

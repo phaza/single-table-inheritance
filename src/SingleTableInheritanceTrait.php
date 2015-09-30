@@ -209,7 +209,7 @@ trait SingleTableInheritanceTrait
                 );
             }
 
-            $class = (@$childTypes[$classType] ?: self::class);
+            $class = (@$childTypes[$classType] ?: static::class);
             $instance = (new $class)->newInstance([], true);
             $instance->setFilteredAttributes((array) $attributes);
             $instance->setConnection($connection ?: $this->connection);

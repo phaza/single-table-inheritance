@@ -34,7 +34,9 @@ trait SingleTableInheritanceTrait
         static::getSingleTableTypeMap();
         static::getAllPersistedAttributes();
 
-        static::addGlobalScope(new SingleTableInheritanceScope);
+        if (empty(static::$singleTableUnrestrictedKeys)) {
+            static::addGlobalScope(new SingleTableInheritanceScope);
+        }
 
         static::observe(new SingleTableInheritanceObserver());
     }
@@ -198,21 +200,21 @@ trait SingleTableInheritanceTrait
 
         if ($classType) {
             $childTypes = static::getSingleTableTypeMap();
-            if (array_key_exists($classType, $childTypes)) {
-                $class = $childTypes[$classType];
-                $instance = (new $class)->newInstance([], true);
-                $instance->setFilteredAttributes((array) $attributes);
-                $instance->setConnection($connection ?: $this->connection);
 
-                return $instance;
-
-            } else {
+            if (!array_key_exists($classType, $childTypes) && empty(static::$singleTableUnrestrictedKeys)) {
                 // Throwing either of the exceptions suggests something has gone very wrong with the Global Scope
                 // There is not graceful recovery so complain loudly.
                 throw new SingleTableInheritanceException(
                     "Cannot construct newFromBuilder for unrecognized $typeField=$classType"
                 );
             }
+
+            $class = (@$childTypes[$classType] ?: self::class);
+            $instance = (new $class)->newInstance([], true);
+            $instance->setFilteredAttributes((array) $attributes);
+            $instance->setConnection($connection ?: $this->connection);
+
+            return $instance;
 
         } else {
             throw new SingleTableInheritanceException("Cannot construct newFromBuilder without a value for $typeField");

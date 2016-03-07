@@ -194,9 +194,11 @@ trait SingleTableInheritanceTrait
      */
     public function newFromBuilder($attributes = array(), $connection = null)
     {
+        $attributes = (array)$attributes;
+
         $typeField = static::$singleTableTypeField;
 
-        $classType = isset($attributes->$typeField) ? $attributes->$typeField : null;
+        $classType = ($attributes[$typeField] ?: null);
 
         if ($classType !== null) {
             $childTypes = static::getSingleTableTypeMap();
@@ -211,7 +213,7 @@ trait SingleTableInheritanceTrait
 
             $class = (@$childTypes[$classType] ?: static::class);
             $instance = (new $class)->newInstance([], true);
-            $instance->setFilteredAttributes((array) $attributes);
+            $instance->setFilteredAttributes($attributes);
             $instance->setConnection($connection ?: $this->connection);
 
             return $instance;

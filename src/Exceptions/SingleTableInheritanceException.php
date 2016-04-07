@@ -2,6 +2,7 @@
 
 namespace Phaza\SingleTableInheritance\Exceptions;
 
-class SingleTableInheritanceException extends \Exception {
+class SingleTableInheritanceException extends \Exception
+{
 
-} 
+}

@@ -17,76 +17,82 @@ use Phaza\SingleTableInheritance\Tests\Fixtures\User;
  *
  * @package Phaza\SingleTableInheritance\Tests
  */
-class SingleTableInheritanceTraitPersistenceTest extends TestCase {
+class SingleTableInheritanceTraitPersistenceTest extends TestCase
+{
 
-  /**
-   * @expectedException \Phaza\SingleTableInheritance\Exceptions\SingleTableInheritanceException
-   */
-  public function testSavingThrowsExceptionIfModelHasNoClassType() {
-    (new Vehicle())->save();
-  }
+    /**
+     * @expectedException \Phaza\SingleTableInheritance\Exceptions\SingleTableInheritanceException
+     */
+    public function testSavingThrowsExceptionIfModelHasNoClassType()
+    {
+        (new Vehicle())->save();
+    }
 
-  public function testOnlyPersistedAttributesAreSaved() {
-    $car = new Car;
-    $car->color = 'red';
-    $car->fuel = 'unleaded';
-    $car->cruft = 'red is my favorite';
+    public function testOnlyPersistedAttributesAreSaved()
+    {
+        $car = new Car;
+        $car->color = 'red';
+        $car->fuel = 'unleaded';
+        $car->cruft = 'red is my favorite';
 
-    $car->save();
+        $car->save();
 
-    $dbCar = DB::table('vehicles')->first();
+        $dbCar = DB::table('vehicles')->first();
 
-    $this->assertEquals($car->id, $dbCar->id);
-    $this->assertNull($dbCar->cruft);
+        $this->assertEquals($car->id, $dbCar->id);
+        $this->assertNull($dbCar->cruft);
 
-    $this->assertEquals('red', $dbCar->color);
-    $this->assertEquals('unleaded', $dbCar->fuel);
-  }
+        $this->assertEquals('red', $dbCar->color);
+        $this->assertEquals('unleaded', $dbCar->fuel);
+    }
 
-  public function testBelongsToRelationForeignKeyIsSaved() {
-    $owner = new User;
-    $owner->name = 'Mickey Mouse';
-    $owner->save();
+    public function testBelongsToRelationForeignKeyIsSaved()
+    {
+        $owner = new User;
+        $owner->name = 'Mickey Mouse';
+        $owner->save();
 
-    $car = new Car;
-    $car->color = 'red';
-    $car->fuel = 'unleaded';
-    $car->cruft = 'red is my favorite';
-    $car->owner()->associate($owner);
-    $car->save();
+        $car = new Car;
+        $car->color = 'red';
+        $car->fuel = 'unleaded';
+        $car->cruft = 'red is my favorite';
+        $car->owner()->associate($owner);
+        $car->save();
 
-    $dbCar = DB::table('vehicles')->first();
+        $dbCar = DB::table('vehicles')->first();
 
-    $this->assertEquals($car->id, $dbCar->id);
-    $this->assertEquals($owner->id, $dbCar->owner_id);
-  }
+        $this->assertEquals($car->id, $dbCar->id);
+        $this->assertEquals($owner->id, $dbCar->owner_id);
+    }
 
-  public function testAllAttributesAreSavedIfPersistedIsEmpty() {
-    $car = new Car;
-    $car->color = 'red';
-    $car->fuel = 'unleaded';
-    $car->cruft = 'red is my favorite';
+    public function testAllAttributesAreSavedIfPersistedIsEmpty()
+    {
+        $car = new Car;
+        $car->color = 'red';
+        $car->fuel = 'unleaded';
+        $car->cruft = 'red is my favorite';
 
-    Car::withAllPersisted([], function() use($car) {
-      $car->save();
-    });
+        Car::withAllPersisted([], function () use ($car) {
+            $car->save();
+        });
 
-    $dbCar = DB::table('vehicles')->first();
+        $dbCar = DB::table('vehicles')->first();
 
-    $this->assertEquals($car->id, $dbCar->id);
-    $this->assertEquals('red is my favorite', $dbCar->cruft);
+        $this->assertEquals($car->id, $dbCar->id);
+        $this->assertEquals('red is my favorite', $dbCar->cruft);
 
-    $this->assertEquals('red', $dbCar->color);
-    $this->assertEquals('unleaded', $dbCar->fuel);
-  }
+        $this->assertEquals('red', $dbCar->color);
+        $this->assertEquals('unleaded', $dbCar->fuel);
+    }
 
-  /**
-   * @expectedException \Phaza\SingleTableInheritance\Exceptions\SingleTableInheritanceException
-   */
-  public function testSaveThrowsExceptionForInvalidAttributesIfConfigured() {
-    $bike = new Bike;
-    $bike->color = 'red';
-    $bike->cruft = 'red is my favorite';
-    $bike->save();
-  }
-} 
+    /**
+     * @expectedException \Phaza\SingleTableInheritance\Exceptions\SingleTableInheritanceException
+     */
+    public function testSaveThrowsExceptionForInvalidAttributesIfConfigured()
+    {
+        $bike = new Bike;
+        $bike->color = 'red';
+        $bike->cruft = 'red is my favorite';
+        $bike->save();
+    }
+}

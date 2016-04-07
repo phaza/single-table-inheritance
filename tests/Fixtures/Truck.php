@@ -2,7 +2,8 @@
 
 namespace Phaza\SingleTableInheritance\Tests\Fixtures;
 
-class Truck extends MotorVehicle {
+class Truck extends MotorVehicle
+{
 
-  protected static $singleTableType = 'truck';
+    protected static $singleTableType = 'truck';
 }
